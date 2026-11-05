@@ -1,23 +1,31 @@
 # Excel Ultimate Search
 
-Search many Excel and CSV files for many terms at once. One file, `Excel_Ultimate_Search.pyw`,
-that opens without a console window.
+Search many Excel, CSV, Word and PDF files for many terms at once. One file,
+`Excel_Ultimate_Search.pyw`, that opens without a console window. English and Greek interface.
 
 ## Run it
 
 1. Install [Python 3.9+](https://www.python.org/downloads/) for Windows (tick "Add python.exe to PATH").
 2. Download `Excel_Ultimate_Search.pyw` and double-click it. On the first start it installs what it
-   needs (PyQt6, openpyxl, xlrd) behind a splash screen and makes Desktop and Start menu shortcuts.
-3. Drop files or folders on the left, paste your terms (one per line), press **Search**.
+   needs (PyQt6, openpyxl, xlrd, RapidFuzz, PyMuPDF) behind a splash screen and makes Desktop and
+   Start menu shortcuts.
+3. Follow the numbered steps in the window:
+   **1 · Files** (drop files or folders) → **2 · Search terms** (one per line) → **3 · Options** → **4 · Search**.
 
 ## What it does
 
-- Reads `.xlsx`, `.xlsm`, `.xls` and `.csv`, every sheet, text, numbers and dates.
-- Match modes: contains, whole cell, starts with, whole word, regular expression; match case;
-  ignore accents (ά = α).
-- Results with the cell (e.g. `B3`) and the matched text highlighted; the terms that were not found;
-  files that could not be read.
-- Filter, sort, double-click to open the file, export to CSV or Excel (with a per-term summary).
+- Reads `.xlsx`, `.xlsm`, `.xls`, `.csv`, `.docx` and `.pdf` (PDFs need real text, not scans).
+- Match modes: contains, whole cell, starts with, whole word, **similar (typos)** with a % threshold,
+  regular expression; match case; ignore accents (ά = α).
+- **Greek = Latin**: Greeklish and wrong-keyboard codes (`skyrodema` → σκυρόδεμα, `beton` → μπετόν,
+  `Β500C` typed with a Greek Β → B500C).
+- **Only these columns / sheets**: `B, D:F`, header names like `Περιγραφή`, sheet names with `*`.
+- Results show the cell (`B3`), the matched text highlighted, and a **row preview** with the column
+  headers. Double-click opens **Excel at that sheet and cell**.
+- **Term lists**: save / load, import from an Excel column or a text file.
+- **Folders**: recent folders, and added folders are watched for new files (F5 refreshes).
+- **Fast**: uses all processor cores; unchanged files are remembered between searches.
+- **Excel report**: checklist found / not found, all results, one sheet per term. Also CSV.
 
 ## Updates
 
