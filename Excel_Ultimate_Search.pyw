@@ -20,7 +20,7 @@ import sys
 from pathlib import Path
 
 APP_NAME = "Excel Ultimate Search"
-APP_VERSION = "3.0.0"
+APP_VERSION = "3.0.1"
 APP_FILE_STEM = "Excel_Ultimate_Search"
 HERE = Path(__file__).resolve().parent
 # pip name -> module to look for
@@ -274,6 +274,9 @@ def _icon_files(t: dict) -> dict:
         "chevron": f'<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12">'
                    f'<path d="M2.5 4.5l3.5 3.5 3.5-3.5" fill="none" stroke="{t["muted"]}" stroke-width="1.8" '
                    f'stroke-linecap="round" stroke-linejoin="round"/></svg>',
+        "chevron_up": f'<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12">'
+                      f'<path d="M2.5 7.5l3.5-3.5 3.5 3.5" fill="none" stroke="{t["muted"]}" stroke-width="1.8" '
+                      f'stroke-linecap="round" stroke-linejoin="round"/></svg>',
     }
     out = {}
     for name, svg in files.items():
@@ -390,8 +393,16 @@ def build_qss(t: dict) -> str:
     QPushButton::menu-indicator {{ image: none; width: 0; }}
     QSpinBox {{
         background: {t['surface2']}; border: 1px solid {t['border']};
-        border-radius: 8px; padding: 5px 6px;
+        border-radius: 8px; padding: 5px 6px; padding-right: 20px;
     }}
+    QSpinBox::up-button, QSpinBox::down-button {{
+        subcontrol-origin: border; width: 18px; border: none; background: transparent;
+    }}
+    QSpinBox::up-button {{ subcontrol-position: top right; margin-top: 3px; }}
+    QSpinBox::down-button {{ subcontrol-position: bottom right; margin-bottom: 3px; }}
+    QSpinBox::up-arrow {{ image: url("{ic['chevron_up']}"); width: 10px; height: 10px; }}
+    QSpinBox::down-arrow {{ image: url("{ic['chevron']}"); width: 10px; height: 10px; }}
+    QSpinBox::up-button:hover, QSpinBox::down-button:hover {{ background: {t['border']}; border-radius: 4px; }}
     QSpinBox:disabled, QLineEdit:disabled {{ color: {t['muted']}; }}
     QFrame#preview {{
         background: {t['surface2']}; border: 1px solid {t['border']}; border-radius: 10px;
@@ -1064,7 +1075,7 @@ class ResultsModel(QAbstractTableModel):
 
     def headerData(self, section, orientation, role=Qt.ItemDataRole.DisplayRole):
         if orientation == Qt.Orientation.Horizontal and role == Qt.ItemDataRole.DisplayRole:
-            return tr(COLUMNS[section]).upper()
+            return upper(tr(COLUMNS[section]))
         return None
 
     def data(self, index, role=Qt.ItemDataRole.DisplayRole):
@@ -1311,8 +1322,13 @@ def card() -> QFrame:
     return f
 
 
+def upper(text: str) -> str:
+    """Upper case; Greek capitals lose their accents (ΑΡΧΕΙΑ, not ΑΡΧΕΊΑ)."""
+    return strip_accents(text.upper()) if LANG == "el" else text.upper()
+
+
 def section(text: str) -> QLabel:
-    lb = QLabel(text.upper())
+    lb = QLabel(upper(text))
     lb.setObjectName("section")
     return lb
 
@@ -1755,11 +1771,11 @@ class MainWindow(QMainWindow):
         hh = tv.horizontalHeader()
         hh.setHighlightSections(False)
         hh.setDefaultAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
-        for i, w in enumerate([56, 130, 0, 70, 66, 60, 130, 200]):
+        for i, w in enumerate([48, 120, 0, 64, 60, 56, 130, 170]):
             if w:
                 tv.setColumnWidth(i, w)
-        for i in (0, 1, 3, 4, 5, 6, 7):
-            hh.resizeSection(i, max(hh.sectionSize(i), hh.sectionSizeHint(i) + 12))
+        for i in (0, 3, 4, 5):
+            hh.resizeSection(i, max(hh.sectionSize(i), hh.sectionSizeHint(i) + 8))
         hh.setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)
         hh.setSectionResizeMode(0, QHeaderView.ResizeMode.Fixed)
         tv.setItemDelegateForColumn(2, HighlightDelegate(tv, lambda: THEMES[self.theme_name]))
@@ -3093,7 +3109,7 @@ EL: dict = {
     "Excel report": "Αναφορά Excel",
     "Checklist found / not found, all results, and one sheet per term":
         "Λίστα ελέγχου βρέθηκε / δεν βρέθηκε, όλα τα αποτελέσματα, και ένα φύλλο ανά όρο",
-    "Clear results": "Καθαρισμός αποτελεσμάτων",
+    "Clear results": "Καθαρισμός",
     "Forget the list": "Διαγραφή της λίστας",
     "Refresh now (F5)": "Ανανέωση τώρα (F5)",
     "Add files": "Προσθήκη αρχείων",

@@ -3,6 +3,8 @@
 Search many Excel, CSV, Word and PDF files for many terms at once. One file,
 `Excel_Ultimate_Search.pyw`, that opens without a console window. English and Greek interface.
 
+![Excel Ultimate Search — results with the row preview](docs/screenshots/main_en_dark.png)
+
 ## Run it
 
 1. Install [Python 3.9+](https://www.python.org/downloads/) for Windows (tick "Add python.exe to PATH").
@@ -26,6 +28,16 @@ Search many Excel, CSV, Word and PDF files for many terms at once. One file,
 - **Folders**: recent folders, and added folders are watched for new files (F5 refreshes).
 - **Fast**: uses all processor cores; unchanged files are remembered between searches.
 - **Excel report**: checklist found / not found, all results, one sheet per term. Also CSV.
+
+## Screenshots
+
+| Greek interface, light theme | Row preview with column headers |
+|---|---|
+| ![Greek interface](docs/screenshots/main_el_light.png) | ![Row preview](docs/screenshots/row_preview.png) |
+| **Import terms from an Excel column** | **Update offer at start** |
+| ![Import from a column](docs/screenshots/import_column.png) | ![Update prompt](docs/screenshots/update_prompt.png) |
+
+![Start-up splash](docs/screenshots/splash.png)
 
 ## Updates
 
